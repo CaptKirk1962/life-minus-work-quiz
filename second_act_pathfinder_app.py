@@ -1,84 +1,56 @@
 
 import streamlit as st
+import json
+from collections import Counter
 
-st.set_page_config(page_title="Second Act Pathfinder", page_icon="🌟")
+# Load questions
+with open("archetype_quiz_questions.json", "r") as f:
+    questions = json.load(f)
 
-st.title("🌟 What’s Your Ideal Life After Work?")
-st.subheader("Take this 2-minute quiz to discover your Second Act Path.")
+st.set_page_config(page_title="Second Act Pathfinder", layout="centered")
+st.title("🧭 Second Act Pathfinder")
+st.subheader("Discover your Life Minus Work Archetype")
 
-st.markdown("---")
+st.markdown("Answer the questions below to reveal your second act identity — and get your personalised lifestyle plan.")
 
-# Define quiz questions and options
-questions = [
-    {
-        "question": "What sounds like the perfect morning?",
-        "options": {
-            "Grabbing my backpack and hitting a trail ☀️": "Explorer",
-            "Volunteering at a community garden 🌱": "Nurturer",
-            "Journaling with a cup of tea and music 🎨": "Creator",
-            "Meeting a friend for coffee and conversation ☕": "Connector",
-        }
-    },
-    {
-        "question": "What excites you most right now?",
-        "options": {
-            "Planning a trip to somewhere I’ve never been 🌍": "Explorer",
-            "Helping others feel seen, heard, and supported 👐": "Nurturer",
-            "Learning a new skill or picking up an old hobby ✏️": "Creator",
-            "Joining a group or starting a club 🤝": "Connector",
-        }
-    },
-    {
-        "question": "Which quote speaks to you most?",
-        "options": {
-            "“Life begins at the end of your comfort zone.”": "Explorer",
-            "“The meaning of life is to give life meaning.”": "Nurturer",
-            "“Creativity is intelligence having fun.”": "Creator",
-            "“Connection is why we’re here.”": "Connector",
-        }
-    },
-    {
-        "question": "What do you miss (or want more of) post-career?",
-        "options": {
-            "Spontaneity and new experiences": "Explorer",
-            "Purpose and making a difference": "Nurturer",
-            "Time for reflection and creating": "Creator",
-            "Laughter and social connection": "Connector",
-        }
-    },
-    {
-        "question": "Pick a dream day headline:",
-        "options": {
-            "“Traveled somewhere new and got lost in the best way”": "Explorer",
-            "“Made someone else’s day brighter”": "Nurturer",
-            "“Created something I’m proud of”": "Creator",
-            "“Was surrounded by my people”": "Connector",
-        }
-    },
-]
+# Store responses
+if "responses" not in st.session_state:
+    st.session_state.responses = []
 
-# Create dictionary to store results
-scores = {"Explorer": 0, "Nurturer": 0, "Creator": 0, "Connector": 0}
+def reset_quiz():
+    st.session_state.responses = []
+    st.session_state.page = 0
 
-# Collect user input
-for idx, q in enumerate(questions):
-    st.write(f"**Q{idx+1}: {q['question']}**")
-    choice = st.radio("", list(q["options"].keys()), key=idx)
-    scores[q["options"][choice]] += 1
-    st.markdown("---")
+# Progress tracker
+if "page" not in st.session_state:
+    st.session_state.page = 0
 
-# Show results
-if st.button("Show My Path"):
-    result = max(scores, key=scores.get)
-    st.success(f"🌟 Your Second Act Archetype is: **{result}**")
+# Display questions one at a time
+if st.session_state.page < len(questions):
+    q = questions[st.session_state.page]
+    st.markdown(f"**Q{st.session_state.page + 1}: {q['question']}**")
+    for archetype, option in q["options"].items():
+        if st.button(option, key=f"{st.session_state.page}-{archetype}"):
+            st.session_state.responses.append(archetype)
+            st.session_state.page += 1
+            st.experimental_rerun()
+else:
+    result = Counter(st.session_state.responses).most_common(1)[0][0]
 
-    descriptions = {
-        "Explorer": "You crave movement, adventure, and novelty. Whether it’s travel, exploration, or bold new experiences, your second act is about freedom with purpose.",
-        "Nurturer": "You find joy in giving, supporting, and making an impact. Your next chapter is about legacy through compassion and helping others thrive.",
-        "Creator": "You thrive when expressing yourself. Your path forward is about curiosity, introspection, and crafting something beautiful and meaningful.",
-        "Connector": "You come alive through people. Relationships, shared experiences, and community are your soul food in this new chapter."
+    st.success(f"🎉 You're a **{result}**!")
+    archetype_links = {
+        "Explorer": "Explorer_Lifestyle_Plan.docx",
+        "Nurturer": "Nurturer_Lifestyle_Plan.docx",
+        "Creator": "Creator_Lifestyle_Plan.docx",
+        "Seeker": "Seeker_Lifestyle_Plan.docx",
+        "Builder": "Builder_Lifestyle_Plan.docx",
+        "Connector": "Connector_Lifestyle_Plan.docx"
     }
 
-    st.markdown(f"**About You:** {descriptions[result]}")
-    st.markdown("👉 [Join the Life Minus Work Community](https://lifeminuswork.com)")
+    plan_link = archetype_links.get(result, "#")
+    st.markdown(f"👇 Download your personalised lifestyle plan:
 
+[📥 Download {result} Plan]({plan_link})")
+
+    st.markdown("---")
+    st.button("🔄 Restart", on_click=reset_quiz)
