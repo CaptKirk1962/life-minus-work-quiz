@@ -1,0 +1,35 @@
+[
+  {
+    "question": "When you picture your ideal day, which feels most aligned?",
+    "options": {
+      "Explorer": "Waking up somewhere new, planning a spontaneous adventure.",
+      "Nurturer": "Spending time with loved ones or helping someone in need.",
+      "Creator": "Working on a passion project or creative outlet.",
+      "Seeker": "Reflecting with a journal or reading something that expands my mind.",
+      "Builder": "Tackling a DIY task or organizing something useful.",
+      "Connector": "Meeting up with friends or starting a conversation with someone new."
+    }
+  },
+  {
+    "question": "Which compliment would mean the most to you?",
+    "options": {
+      "Explorer": "You're always up for anything.",
+      "Nurturer": "You make people feel truly cared for.",
+      "Creator": "You're so imaginative and inspiring.",
+      "Seeker": "You really make me think deeper.",
+      "Builder": "You get things done like no one else.",
+      "Connector": "You bring people together effortlessly."
+    }
+  },
+  {
+    "question": "You just got a free day to do anything \u2014 what\u2019s your first instinct?",
+    "options": {
+      "Explorer": "Try something I\u2019ve never done before.",
+      "Nurturer": "Call someone I love and check in.",
+      "Creator": "Dive into a hobby or new project.",
+      "Seeker": "Spend quiet time reflecting or exploring my thoughts.",
+      "Builder": "Fix, sort, or plan something I\u2019ve been meaning to get to.",
+      "Connector": "Invite someone to hang out or plan a gathering."
+    }
+  }
+]
