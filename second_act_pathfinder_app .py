@@ -48,9 +48,9 @@ else:
     }
 
     plan_link = archetype_links.get(result, "#")
-    st.markdown(f"""👇 Download your personalised lifestyle plan:
+    st.markdown(f"👇 Download your personalised lifestyle plan:
 
-[📥 Download {result} Plan]({plan_link})""")
+[📥 Download {result} Plan]({plan_link})")
 
     st.markdown("---")
     st.button("🔄 Restart", on_click=reset_quiz)
